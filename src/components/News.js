@@ -24,42 +24,37 @@ export default class News extends Component {
             page: 1
         }
     }
-    async componentDidMount() {
-        let url = `https://newsapi.org/v2/top-headlines?country=${this.props.country}&category=${this.props.category}&apiKey=57f2716ebf7b435fbadac102656686ba&page=1&pageSize=${this.props.pageSize}`
-        this.setState({ loading: true })
-        let data = await fetch(url)
-        let parsedData = await data.json()
-        this.setState({ articles: parsedData.articles, totalResults: parsedData.totalResults, loading: false })
-    }
-    handleNextClick = async () => {
-
-        if (!(this.state.page + 1 > Math.ceil(this.state.totalResults / this.props.pageSize))) {
-
-            let url = `https://newsapi.org/v2/top-headlines?country=${this.props.country}&category=${this.props.category}&apiKey=57f2716ebf7b435fbadac102656686ba&page=${this.state.page + 1}&pageSize=${this.props.pageSize}`
-            this.setState({ loading: true })
-            let data = await fetch(url)
-            let parsedData = await data.json()
-
-            this.setState({
-                page: this.state.page + 1,
-                articles: parsedData.articles,
-                loading: false
-            })
-        }
-    }
-    handlePrevClick = async () => {
-
-        let url = `https://newsapi.org/v2/top-headlines?country=${this.props.country}&category=${this.props.category}&apiKey=57f2716ebf7b435fbadac102656686ba&page=${this.state.page - 1}&pageSize=${this.props.pageSize}`
+    async updateNews() {
+        let url = `https://newsapi.org/v2/top-headlines?country=${this.props.country}&category=${this.props.category}&apiKey=57f2716ebf7b435fbadac102656686ba&page=${this.state.page}&pageSize=${this.props.pageSize}`
         this.setState({ loading: true })
         let data = await fetch(url)
         let parsedData = await data.json()
 
         this.setState({
-            page: this.state.page - 1,
             articles: parsedData.articles,
+            totalResults: parsedData.totalResults,
             loading: false
         })
+    }
+    async componentDidMount() {
 
+        this.updateNews()
+    }
+    
+    handleNextClick = async () => {
+
+        this.setState({
+            page: this.state.page + 1
+        })
+        this.updateNews();
+    }
+
+    handlePrevClick = async () => {
+
+        this.setState({
+            page: this.state.page - 1
+        })
+        this.updateNews();
     }
 
     render() {
@@ -70,7 +65,7 @@ export default class News extends Component {
                 <div className="row">
                     {this.state.articles.map((element) => {
                         return <div key={element.url} className="col-md-4">
-                            <NewsItem title={element.title ? element.title.slice(0, 80) : ""} description={element.description ? element.description.slice(0, 130) : "Lorem ipsum, dolor sit amet consectetur adipisicing elit. Impedit natus tempore incidunt"} imageUrl={element.urlToImage ? element.urlToImage : "https://cdn.wionews.com/sites/default/files/styles/story_page/public/2022/03/31/251357-hubble-space-telescope.jpg"} newsUrl={element.url} author={!element.author ? "Unknown" : element.author} date={new Date(element.publishedAt).toGMTString()} source={element.source.name}/>
+                            <NewsItem title={element.title ? element.title.slice(0, 80) : ""} description={element.description ? element.description.slice(0, 130) : "Lorem ipsum, dolor sit amet consectetur adipisicing elit. Impedit natus tempore incidunt"} imageUrl={element.urlToImage ? element.urlToImage : "https://cdn.wionews.com/sites/default/files/styles/story_page/public/2022/03/31/251357-hubble-space-telescope.jpg"} newsUrl={element.url} author={!element.author ? "Unknown" : element.author} date={new Date(element.publishedAt).toGMTString()} source={element.source.name} />
                         </div>
                     })}
                 </div>
