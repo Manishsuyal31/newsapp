@@ -19,7 +19,7 @@ export default function News(props) {
 
     const updateNews = async () => {
         const url = `https://newsapi.org/v2/top-headlines?country=${props.country}&category=${props.category}&apiKey=57f2716ebf7b435fbadac102656686ba&page=${page}&pageSize=${props.pageSize}`
-        setLoading({ loading: true })
+        setLoading(true)
         let data = await fetch(url)
         let parsedData = await data.json()
         setArticles(parsedData.articles)
@@ -32,24 +32,18 @@ export default function News(props) {
 
     const handleNextClick = async () => {
 
-        setPage({
-            page: page + 1
-        })
+        setPage(page+1)
         updateNews();
     }
 
     const handlePrevClick = async () => {
 
-        setPage({
-            page: page - 1
-        })
+        setPage(page-1)
         updateNews();
     }
     const fetchMoreData = async () => {
-        setPage({
-            page: page + 1
-        })
-        const url = `https://newsapi.org/v2/top-headlines?country=${props.country}&category=${props.category}&apiKey=57f2716ebf7b435fbadac102656686ba&page=${page}&pageSize=${props.pageSize}`
+        const url = `https://newsapi.org/v2/top-headlines?country=${props.country}&category=${props.category}&apiKey=57f2716ebf7b435fbadac102656686ba&page=${page+1}&pageSize=${props.pageSize}`
+        setPage(page+1)
         let data = await fetch(url)
         let parsedData = await data.json()
 
@@ -61,7 +55,7 @@ export default function News(props) {
 
     return (
         <>
-            <h1 className='text-center' style={{ margin: '30px' }}>Top {capitalizeFirstLetter(props.category)} Headlines</h1>
+            <h1 className='text-center' style={{ margin: '90px' }}>Top {capitalizeFirstLetter(props.category)} Headlines</h1>
             {loading && <Spinner />}
 
             <InfiniteScroll
