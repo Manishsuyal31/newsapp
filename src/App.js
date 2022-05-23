@@ -14,7 +14,7 @@ export default function App() {
       <Router>
         <NavBar />
         <Routes>
-          <Route exact path="/" element={<News key="all" pageSize={pageSize} country="in" />} />
+          <Route exact path="/newsapp" element={<News key="all" pageSize={pageSize} country="in" />} />
           <Route exact path="/business" element={<News key="business" pageSize={pageSize} country="in" category="business" />} />
           <Route exact path="/entertainment" element={<News key="entertainment" pageSize={pageSize} country="in" category="entertainment" />} />
           <Route exact path="/general" element={<News key="general" pageSize={pageSize} country="in" category="general" />} />
